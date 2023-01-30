@@ -15,6 +15,7 @@ export class App extends Component {
     page: 1,
     showModal: false,
     largeImage: '',
+    totalHitsForPage: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -31,6 +32,7 @@ export class App extends Component {
       const { hits } = await searchImage(search, page);
       this.setState(({ items }) => ({
         items: [...items, ...hits],
+        totalHitsForPage: hits.length,
       }));
     } catch (error) {
       this.setState({ error: error.message });
@@ -56,14 +58,17 @@ export class App extends Component {
   };
 
   render() {
-    const { items, loading, error, showModal, largeImage } = this.state;
+    const { items, loading, error, showModal, largeImage, totalHitsForPage } =
+      this.state;
     return (
       <>
         <Searchbar onSubmit={this.searchImages} />
         {loading && <Loader />}
         {error && <p>Error, please try again later</p>}
         <ImageGallery items={items} takeLargeImage={this.showLagreImage} />
-        {Boolean(items.length) && <Button onClick={this.loadMore} />}
+        {Boolean(items.length && totalHitsForPage >= 12) && (
+          <Button onClick={this.loadMore} />
+        )}
         {showModal && <Modal largeImage={largeImage} close={this.closeModal} />}
       </>
     );

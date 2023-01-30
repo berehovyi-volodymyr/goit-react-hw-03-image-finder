@@ -24,7 +24,7 @@ class Modal extends Component {
     return createPortal(
       <div className={styles.Overlay} onClick={this.closeModal}>
         <div className={styles.Modal}>
-          <img src={largeImage} alt="bigImage" width="900" />
+          <img src={largeImage} alt="bigImage" />
         </div>
       </div>,
       modalRoot
@@ -36,4 +36,5 @@ export default Modal;
 
 Modal.propTypes = {
   largeImage: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
 };
